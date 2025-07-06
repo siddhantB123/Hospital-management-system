@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1>Welcome to Oracle Hospital</h1>
+        <p class="hero-subtitle">Your trusted partner in healthcare. Experience world-class medical services with our team of expert doctors and state-of-the-art facilities.</p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
+            <a href="{{ url_for('register') }}" class="btn btn-secondary">Register</a>
+        </div>
+    </div>
+</div>
+
+<div class="stats-section">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <div class="counter" data-target="5000">0</div>
+                <p>Happy Patients</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-user-md"></i>
+                <div class="counter" data-target="100">0</div>
+                <p>Expert Doctors</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-calendar-check"></i>
+                <div class="counter" data-target="15000">0</div>
+                <p>Appointments</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-hospital"></i>
+                <div class="counter" data-target="5">0</div>
+                <p>Departments</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="features-section">
+    <div class="container">
+        <h2 class="section-title">Why Choose Us?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-calendar-check"></i>
+                <h3>Easy Appointment Booking</h3>
+                <p>Book your appointments online with just a few clicks.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-user-md"></i>
+                <h3>Expert Doctors</h3>
+                <p>Access to a wide network of experienced healthcare professionals.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-clock"></i>
+                <h3>24/7 Access</h3>
+                <p>Manage your healthcare needs anytime, anywhere.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Secure Platform</h3>
+                <p>Your health information is protected with advanced security measures.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

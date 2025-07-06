@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-header text-center">
+                    <h2><i class="fas fa-hospital-user"></i> Hospital Management System</h2>
+                </div>
+                <div class="card-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form method="POST" action="{{ url_for('login') }}">
+                        <div class="form-group mb-3">
+                            <label for="user_type">Login As:</label>
+                            <select class="form-select" id="user_type" name="user_type" required onchange="updateLoginFields()">
+                                <option value="">Select user type</option>
+                                <option value="admin">Physician</option>
+                                <option value="patient">Patient</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="username" id="username_label">
+                                <i class="fas fa-user"></i> Name
+                            </label>
+                            <input type="text" id="username" name="username" class="form-control" required>
+                            <div class="form-text" id="username_help"></div>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="password">
+                                <i class="fas fa-lock"></i> Password
+                            </label>
+                            <input type="password" id="password" name="password" class="form-control" required>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <p>Don't have an account? <a href="{{ url_for('register') }}" class="text-primary">Register here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function updateLoginFields() {
+    const userType = document.getElementById('user_type').value;
+    const usernameLabel = document.getElementById('username_label');
+    const usernameHelp = document.getElementById('username_help');
+
+    if (userType === 'patient') {
+        usernameLabel.innerHTML = '<i class="fas fa-user"></i> Patient Name';
+        usernameHelp.textContent = 'Enter your full name as registered';
+    } else {
+        usernameLabel.innerHTML = '<i class="fas fa-user-md"></i> Physician Name';
+        usernameHelp.textContent = 'Enter your full name as registered';
+    }
+}
+</script>
+{% endblock %} 

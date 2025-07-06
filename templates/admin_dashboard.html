@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>Admin Dashboard</h1>
+        <p>Welcome, Admin! Manage your hospital system efficiently.</p>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <i class="fas fa-users"></i>
+            <div class="counter" data-target="{{ patients|length }}">0</div>
+            <p>Total Patients</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-calendar-check"></i>
+            <div class="counter" data-target="{{ appointments|length }}">0</div>
+            <p>Total Appointments</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-clock"></i>
+            <div class="counter" data-target="{{ appointments|selectattr('status', 'equalto', 'pending')|list|length }}">0</div>
+            <p>Pending Appointments</p>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-check-circle"></i>
+            <div class="counter" data-target="{{ appointments|selectattr('status', 'equalto', 'confirmed')|list|length }}">0</div>
+            <p>Confirmed Appointments</p>
+        </div>
+    </div>
+
+    <!-- Patients Section -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2>Patients Management</h2>
+            <button class="btn btn-primary" onclick="showAddPatientModal()">
+                <i class="fas fa-user-plus"></i> Add New Patient
+            </button>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Date of Birth</th>
+                        <th>Gender</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for patient in patients %}
+                    <tr>
+                        <td>{{ patient.id }}</td>
+                        <td>{{ patient.full_name }}</td>
+                        <td>{{ patient.user.email }}</td>
+                        <td>{{ patient.phone }}</td>
+                        <td>{{ patient.date_of_birth.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ patient.gender }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="viewPatientDetails({{ patient.id }})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" onclick="editPatient({{ patient.id }})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="deletePatient({{ patient.id }})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Appointments Section -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2>Appointments Management</h2>
+            <div class="appointment-filters">
+                <select id="statusFilter" onchange="filterAppointments()">
+                    <option value="all">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+                <input type="date" id="dateFilter" onchange="filterAppointments()">
+            </div>
+        </div>
+        <div class="appointments-grid">
+            {% for appointment in appointments %}
+            <div class="appointment-card">
+                <div class="appointment-header">
+                    <h3>Appointment #{{ appointment.id }}</h3>
+                    <span class="status-badge status-{{ appointment.status }}">
+                        {{ appointment.status|title }}
+                    </span>
+                </div>
+                <div class="appointment-info">
+                    <p><strong>Patient:</strong> {{ appointment.patient.full_name }}</p>
+                    <p><strong>Doctor:</strong> {{ appointment.doctor_name }}</p>
+                    <p><strong>Date:</strong> {{ appointment.appointment_date.strftime('%Y-%m-%d %H:%M') }}</p>
+                    {% if appointment.notes %}
+                    <p><strong>Notes:</strong> {{ appointment.notes }}</p>
+                    {% endif %}
+                </div>
+                <div class="appointment-actions">
+                    <button class="btn btn-sm btn-primary" onclick="updateAppointmentStatus({{ appointment.id }})">
+                        Update Status
+                    </button>
+                    <button class="btn btn-sm btn-danger" onclick="cancelAppointment({{ appointment.id }})">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Add Patient Modal -->
+<div id="addPatientModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Add New Patient</h2>
+        <form id="addPatientForm" method="POST" action="{{ url_for('add_patient') }}">
+            <div class="form-group">
+                <label for="full_name">Full Name</label>
+                <input type="text" id="full_name" name="full_name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="date_of_birth">Date of Birth</label>
+                <input type="date" id="date_of_birth" name="date_of_birth" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" name="gender" required>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Patient</button>
+        </form>
+    </div>
+</div>
+
+<script>
+// Modal functionality
+function showAddPatientModal() {
+    document.getElementById('addPatientModal').style.display = 'block';
+}
+
+// Close modal when clicking the X or outside the modal
+document.querySelector('.close').onclick = function() {
+    document.getElementById('addPatientModal').style.display = 'none';
+}
+
+window.onclick = function(event) {
+    if (event.target == document.getElementById('addPatientModal')) {
+        document.getElementById('addPatientModal').style.display = 'none';
+    }
+}
+
+// Appointment filtering
+function filterAppointments() {
+    const status = document.getElementById('statusFilter').value;
+    const date = document.getElementById('dateFilter').value;
+    // Add your filtering logic here
+}
+
+// Patient management functions
+function viewPatientDetails(patientId) {
+    // Add your view patient details logic here
+}
+
+function editPatient(patientId) {
+    // Add your edit patient logic here
+}
+
+function deletePatient(patientId) {
+    if (confirm('Are you sure you want to delete this patient?')) {
+        // Add your delete patient logic here
+    }
+}
+
+// Appointment management functions
+function updateAppointmentStatus(appointmentId) {
+    // Add your update appointment status logic here
+}
+
+function cancelAppointment(appointmentId) {
+    if (confirm('Are you sure you want to cancel this appointment?')) {
+        // Add your cancel appointment logic here
+    }
+}
+</script>
+{% endblock %} 

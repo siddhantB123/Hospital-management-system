@@ -1,0 +1,626 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="text-center mb-0">
+                        <i class="fas fa-user-md me-2"></i>Patient Dashboard
+                    </h2>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" onclick="openProceduresModal()">
+                            <i class="fas fa-procedures me-2"></i> View Procedures
+                        </button>
+                        <button class="btn btn-primary" onclick="openAccommodationModal()">
+                            <i class="fas fa-bed me-2"></i> View Accommodation
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if patient %}
+                        <!-- Personal Information Card -->
+                        <div class="card mb-4 border-0 shadow-sm">
+                            <div class="card-header bg-light">
+                                <h4 class="mb-0">
+                                    <i class="fas fa-user-circle me-2 text-primary"></i>Personal Information
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="info-item p-3 bg-light rounded">
+                                            <h6 class="text-muted mb-1">Patient ID</h6>
+                                            <p class="mb-0 h5">{{ patient.patient_id }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="info-item p-3 bg-light rounded">
+                                            <h6 class="text-muted mb-1">Full Name</h6>
+                                            <p class="mb-0 h5">{{ patient.name }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="info-item p-3 bg-light rounded">
+                                            <h6 class="text-muted mb-1">Age</h6>
+                                            <p class="mb-0 h5">{{ patient.age }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="info-item p-3 bg-light rounded">
+                                            <h6 class="text-muted mb-1">Gender</h6>
+                                            <p class="mb-0 h5">{{ patient.sex }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <div class="info-item p-3 bg-light rounded">
+                                            <h6 class="text-muted mb-1">Phone Number</h6>
+                                            <p class="mb-0 h5">{{ patient.phone_no }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Department Information Card -->
+                        <div class="card mb-4 border-0 shadow-sm">
+                            <div class="card-header bg-light">
+                                <h4 class="mb-0">
+                                    <i class="fas fa-hospital me-2 text-primary"></i>Department Information
+                                </h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="info-item p-3 bg-light rounded">
+                                            <h6 class="text-muted mb-1">Department</h6>
+                                            <p class="mb-0 h5">{{ patient.dept_name }}</p>
+                                        </div>
+                                    </div>
+                                    {% if physician %}
+                                    <div class="col-md-6 mb-3">
+                                        <div class="info-item p-3 bg-light rounded">
+                                            <h6 class="text-muted mb-1">Assigned Doctor</h6>
+                                            <p class="mb-0 h5">
+                                                {{ physician.name }}
+                                                <small class="text-muted d-block">{{ physician.position }}</small>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Prescriptions Card -->
+                        <div class="card mb-4 border-0 shadow-sm">
+                            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                <h4 class="mb-0">
+                                    <i class="fas fa-prescription me-2 text-primary"></i>Prescriptions
+                                </h4>
+                                <button type="button" class="btn btn-primary" onclick="openPrescriptionsModal()">
+                                    <i class="fas fa-eye me-2"></i>View Prescriptions
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Information Alert -->
+                        <div class="alert alert-info shadow-sm">
+                            <i class="fas fa-info-circle me-2"></i>
+                            For any changes to your information, please contact the hospital administration.
+                        </div>
+
+                    {% else %}
+                        <div class="alert alert-danger shadow-sm">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Patient information not found. Please contact the administrator.
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-light text-center">
+                    <a href="{{ url_for('logout') }}" class="btn btn-danger">
+                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Procedures Modal -->
+<div class="modal" id="proceduresModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-white">
+                    <i class="fas fa-procedures me-2"></i>My Medical Procedures
+                </h5>
+                <button type="button" class="btn-close btn-close-white" onclick="closeProceduresModal()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Procedure Name</th>
+                                <th>Cost</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="proceduresList">
+                            <tr>
+                                <td colspan="3" class="text-center">Loading procedures...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeProceduresModal()">
+                    <i class="fas fa-times me-2"></i>Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Prescriptions Modal -->
+<div class="modal" id="prescriptionsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-white">
+                    <i class="fas fa-prescription me-2"></i>My Prescriptions
+                </h5>
+                <button type="button" class="btn-close btn-close-white" onclick="closePrescriptionsModal()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Prescription ID</th>
+                                <th>Medication</th>
+                                <th>Prescribed By</th>
+                            </tr>
+                        </thead>
+                        <tbody id="prescriptionsTableBody">
+                            <tr>
+                                <td colspan="3" class="text-center">Loading prescriptions...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closePrescriptionsModal()">
+                    <i class="fas fa-times me-2"></i>Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add the Accommodation Modal -->
+<div class="modal" id="accommodationModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-white">
+                    <i class="fas fa-bed me-2"></i>My Accommodation Details
+                </h5>
+                <button type="button" class="btn-close btn-close-white" onclick="closeAccommodationModal()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Room Number</th>
+                            </tr>
+                        </thead>
+                        <tbody id="accommodationList">
+                            <tr>
+                                <td class="text-center">Loading accommodation details...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeAccommodationModal()">
+                    <i class="fas fa-times me-2"></i>Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Function to open procedures modal
+function openProceduresModal() {
+    const modal = document.getElementById('proceduresModal');
+    modal.style.display = 'block';
+    document.body.classList.add('modal-open');
+    loadProcedures();
+}
+
+// Function to close procedures modal
+function closeProceduresModal() {
+    const modal = document.getElementById('proceduresModal');
+    modal.style.display = 'none';
+    document.body.classList.remove('modal-open');
+}
+
+// Function to load procedures
+function loadProcedures() {
+    const proceduresList = document.getElementById('proceduresList');
+    proceduresList.innerHTML = '<tr><td colspan="3" class="text-center">Loading procedures...</td></tr>';
+
+    fetch('/get_patient_procedures')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                proceduresList.innerHTML = `<tr><td colspan="3" class="text-center text-danger">${data.error}</td></tr>`;
+                return;
+            }
+
+            if (!data.procedures || data.procedures.length === 0) {
+                proceduresList.innerHTML = '<tr><td colspan="3" class="text-center">No procedures found</td></tr>';
+                return;
+            }
+
+            proceduresList.innerHTML = data.procedures.map(procedure => `
+                <tr>
+                    <td>${procedure.name}</td>
+                    <td>₹${procedure.cost.toLocaleString()}</td>
+                    <td>${procedure.procedure_date}</td>
+                </tr>
+            `).join('');
+        })
+        .catch(error => {
+            console.error('Error loading procedures:', error);
+            proceduresList.innerHTML = `<tr><td colspan="3" class="text-center text-danger">Error loading procedures. Please try again later.</td></tr>`;
+        });
+}
+
+// Function to open modal
+function openPrescriptionsModal() {
+    const modal = document.getElementById('prescriptionsModal');
+    modal.style.display = 'block';
+    document.body.classList.add('modal-open');
+    loadPrescriptions();
+}
+
+// Function to close modal
+function closePrescriptionsModal() {
+    const modal = document.getElementById('prescriptionsModal');
+    modal.style.display = 'none';
+    document.body.classList.remove('modal-open');
+}
+
+// Function to load prescriptions
+function loadPrescriptions() {
+    const tableBody = document.getElementById('prescriptionsTableBody');
+    tableBody.innerHTML = '<tr><td colspan="3" class="text-center">Loading prescriptions...</td></tr>';
+
+    fetch('/get_patient_prescriptions')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                tableBody.innerHTML = `<tr><td colspan="3" class="text-center text-danger">${data.error}</td></tr>`;
+                return;
+            }
+
+            if (!data.prescriptions || data.prescriptions.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="3" class="text-center">No prescriptions found</td></tr>';
+                return;
+            }
+
+            tableBody.innerHTML = data.prescriptions.map(prescription => `
+                <tr>
+                    <td>${prescription.prescription_id}</td>
+                    <td>${prescription.med_name}</td>
+                    <td>${prescription.physician_name}</td>
+                </tr>
+            `).join('');
+        })
+        .catch(error => {
+            console.error('Error loading prescriptions:', error);
+            tableBody.innerHTML = `<tr><td colspan="3" class="text-center text-danger">Error loading prescriptions. Please try again later.</td></tr>`;
+        });
+}
+
+// Add these new functions for accommodation modal
+function openAccommodationModal() {
+    const modal = document.getElementById('accommodationModal');
+    modal.style.display = 'block';
+    document.body.classList.add('modal-open');
+    loadAccommodation();
+}
+
+function closeAccommodationModal() {
+    const modal = document.getElementById('accommodationModal');
+    modal.style.display = 'none';
+    document.body.classList.remove('modal-open');
+}
+
+function loadAccommodation() {
+    const accommodationList = document.getElementById('accommodationList');
+    accommodationList.innerHTML = '<tr><td class="text-center">Loading accommodation details...</td></tr>';
+
+    fetch('/get_patient_accommodation')
+        .then(response => {
+            console.log('Response status:', response.status); // Debug log
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Accommodation data:', data); // Debug log
+            
+            if (data.error) {
+                accommodationList.innerHTML = `<tr><td class="text-center text-danger">${data.error}</td></tr>`;
+                return;
+            }
+
+            if (!data.accommodation) {
+                accommodationList.innerHTML = '<tr><td class="text-center">No active accommodation found</td></tr>';
+                return;
+            }
+
+            console.log('Room number:', data.accommodation.room_no); // Debug log
+            accommodationList.innerHTML = `
+                <tr>
+                    <td class="text-center fs-5">Room ${data.accommodation.room_no}</td>
+                </tr>
+            `;
+        })
+        .catch(error => {
+            console.error('Error loading accommodation:', error);
+            accommodationList.innerHTML = `<tr><td class="text-center text-danger">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                Error loading accommodation details. Please try again later.
+            </td></tr>`;
+        });
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const proceduresModal = document.getElementById('proceduresModal');
+    const prescriptionsModal = document.getElementById('prescriptionsModal');
+    const accommodationModal = document.getElementById('accommodationModal');
+    
+    if (event.target === proceduresModal) {
+        closeProceduresModal();
+    } else if (event.target === prescriptionsModal) {
+        closePrescriptionsModal();
+    } else if (event.target === accommodationModal) {
+        closeAccommodationModal();
+    }
+}
+
+// Update the procedures button to use the new modal
+document.querySelector('.btn[onclick="showProceduresModal()"]').setAttribute('onclick', 'openProceduresModal()');
+</script>
+
+<style>
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card-header {
+    border-bottom: none;
+}
+
+.modal-content {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.badge {
+    font-size: 0.9rem;
+    padding: 0.5em 0.8em;
+    border-radius: 20px;
+}
+
+/* Ensure modal is visible */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal.show {
+    display: block;
+}
+
+.modal-dialog {
+    position: relative;
+    width: auto;
+    margin: 0.5rem;
+    pointer-events: none;
+}
+
+.modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.3rem;
+    outline: 0;
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+}
+
+.modal-backdrop.fade {
+    opacity: 0;
+}
+
+.modal-backdrop.show {
+    opacity: 0.5;
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    font-family: 'Poppins', sans-serif;
+}
+
+.modal-dialog {
+    position: relative;
+    width: auto;
+    margin: 1.75rem auto;
+    max-width: 800px;
+}
+
+.modal-content {
+    position: relative;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: none;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+}
+
+.modal-body {
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+}
+
+.modal-footer {
+    padding: 1.5rem;
+    border-top: 1px solid #dee2e6;
+    background-color: #fff;
+}
+
+/* Table styles */
+.table {
+    margin-bottom: 0;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table thead th {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+    border: none;
+    padding: 1rem;
+    font-weight: 500;
+}
+
+.table tbody td {
+    padding: 1rem;
+    border-color: #eef2f7;
+    color: #2a5298;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Button styles */
+.modal .btn-secondary {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.modal .btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(42, 82, 152, 0.3);
+}
+
+/* Loading and error states */
+.modal .text-center {
+    color: #1e3c72;
+}
+
+.modal .text-danger {
+    color: #dc3545;
+}
+
+/* When modal is open */
+body.modal-open {
+    overflow: hidden;
+}
+
+/* Add these additional styles for the accommodation modal */
+.badge {
+    padding: 0.5em 1em;
+    font-weight: 500;
+    border-radius: 30px;
+}
+
+.bg-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+}
+
+/* Update the button group styling */
+.card-header .d-flex {
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.card-header .btn {
+    margin: 0 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.card-header .btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+</style>
+{% endblock %} 

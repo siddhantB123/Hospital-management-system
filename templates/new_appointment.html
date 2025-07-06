@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h2 class="text-center">Book New Appointment</h2>
+                </div>
+                <div class="card-body">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form method="POST" action="{{ url_for('new_appointment') }}">
+                        <!-- Department Selection -->
+                        <div class="form-group mb-3">
+                            <label for="dept_id">Select Department:</label>
+                            <select class="form-select" id="dept_id" name="dept_id" required onchange="loadPhysicians()">
+                                <option value="">Choose Department</option>
+                                {% for dept in departments %}
+                                    <option value="{{ dept.dept_id }}">{{ dept.deptname }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Physician Selection -->
+                        <div class="form-group mb-3">
+                            <label for="emp_id">Select Physician:</label>
+                            <select class="form-select" id="emp_id" name="emp_id" required disabled>
+                                <option value="">First Select Department</option>
+                            </select>
+                        </div>
+
+                        <!-- Date Selection -->
+                        <div class="form-group mb-3">
+                            <label for="app_date">Select Date:</label>
+                            <input type="date" class="form-control" id="app_date" name="app_date" required 
+                                   min="{{ today_date }}" onchange="checkAvailableSlots()">
+                        </div>
+
+                        <!-- Time Selection -->
+                        <div class="form-group mb-3">
+                            <label for="app_time">Select Time:</label>
+                            <select class="form-select" id="app_time" name="app_time" required disabled>
+                                <option value="">First Select Date</option>
+                            </select>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Book Appointment</button>
+                            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function loadPhysicians() {
+    const deptId = document.getElementById('dept_id').value;
+    const physicianSelect = document.getElementById('emp_id');
+    
+    if (!deptId) {
+        physicianSelect.disabled = true;
+        physicianSelect.innerHTML = '<option value="">First Select Department</option>';
+        return;
+    }
+
+    try {
+        const response = await fetch(`/get_physicians/${deptId}`);
+        const physicians = await response.json();
+        
+        physicianSelect.innerHTML = '<option value="">Select Physician</option>';
+        physicians.forEach(physician => {
+            const option = document.createElement('option');
+            option.value = physician.emp_id;
+            option.textContent = `${physician.name} (${physician.position})`;
+            physicianSelect.appendChild(option);
+        });
+        physicianSelect.disabled = false;
+    } catch (error) {
+        console.error('Error loading physicians:', error);
+    }
+}
+
+async function checkAvailableSlots() {
+    const empId = document.getElementById('emp_id').value;
+    const appDate = document.getElementById('app_date').value;
+    const timeSelect = document.getElementById('app_time');
+    
+    if (!empId || !appDate) {
+        timeSelect.disabled = true;
+        timeSelect.innerHTML = '<option value="">First Select Date</option>';
+        return;
+    }
+
+    try {
+        const response = await fetch(`/get_available_slots/${empId}/${appDate}`);
+        const availableSlots = await response.json();
+        
+        timeSelect.innerHTML = '<option value="">Select Time</option>';
+        availableSlots.forEach(slot => {
+            const option = document.createElement('option');
+            option.value = slot;
+            option.textContent = slot;
+            timeSelect.appendChild(option);
+        });
+        timeSelect.disabled = false;
+    } catch (error) {
+        console.error('Error loading time slots:', error);
+    }
+}
+
+// Prevent selecting past dates
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('app_date').min = today;
+</script>
+{% endblock %} 

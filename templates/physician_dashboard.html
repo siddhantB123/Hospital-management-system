@@ -1,0 +1,1174 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Add Bootstrap CSS and JS in the head section -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+    body {
+        background-color: #1e1e2e;
+        color: #ffffff;
+        font-size: 1.1rem;
+    }
+
+    .container {
+        background-color: #1e1e2e;
+        padding: 30px;
+        max-width: 1400px;
+    }
+
+    .card {
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        background-color: #313244;
+        color: #ffffff;
+        margin-bottom: 25px;
+    }
+
+    .card-header {
+        background-color: #1e1e2e;
+        color: #89b4fa;
+        border-bottom: none;
+        font-weight: 600;
+        font-size: 1.3rem;
+        padding: 20px;
+    }
+
+    .card-body {
+        background-color: #313244;
+        color: #ffffff;
+        padding: 25px;
+    }
+
+    .btn-primary {
+        background-color: #89b4fa;
+        border-color: #89b4fa;
+        color: #1e1e2e;
+        font-weight: 500;
+        font-size: 1.1rem;
+        padding: 10px 20px;
+    }
+
+    .btn-primary:hover {
+        background-color: #b4befe;
+        border-color: #b4befe;
+        color: #1e1e2e;
+    }
+
+    .btn-outline-primary {
+        color: #89b4fa;
+        border-color: #89b4fa;
+        font-weight: 500;
+        font-size: 1.1rem;
+        padding: 10px 20px;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: #89b4fa;
+        color: #1e1e2e;
+    }
+
+    .badge {
+        font-size: 1rem;
+        padding: 8px 12px;
+    }
+
+    .badge.bg-success {
+        background-color: #a6e3a1 !important;
+        color: #1e1e2e;
+        font-weight: 500;
+    }
+
+    .badge.bg-secondary {
+        background-color: #313244 !important;
+        color: #ffffff;
+        font-weight: 500;
+    }
+
+    .table {
+        color: #ffffff;
+        font-size: 1.1rem;
+    }
+
+    .table th {
+        background-color: #1e1e2e;
+        color: #89b4fa;
+        border-bottom: 1px solid #313244;
+        font-weight: 600;
+        font-size: 1.2rem;
+        padding: 15px;
+    }
+
+    .table td {
+        border-bottom: 1px solid #313244;
+        color: #ffffff;
+        font-weight: 400;
+        padding: 15px;
+        vertical-align: middle;
+    }
+
+    .list-group-item {
+        background-color: #313244;
+        color: #ffffff;
+        border-color: #1e1e2e;
+        font-weight: 400;
+        font-size: 1.1rem;
+        padding: 15px;
+    }
+
+    .list-group-item:hover {
+        background-color: #1e1e2e;
+        color: #89b4fa;
+    }
+
+    .modal-content {
+        background-color: #313244;
+        color: #ffffff;
+    }
+
+    .modal-header {
+        background-color: #1e1e2e;
+        color: #89b4fa;
+        border-bottom: 1px solid #313244;
+        font-size: 1.3rem;
+    }
+
+    .modal-footer {
+        border-top: 1px solid #313244;
+    }
+
+    .modal-body {
+        font-size: 1.1rem;
+        padding: 25px;
+    }
+
+    .alert {
+        font-size: 1.1rem;
+        padding: 15px 20px;
+    }
+
+    .alert-info {
+        background-color: #1e1e2e;
+        border-color: #89b4fa;
+        color: #89b4fa;
+        font-weight: 500;
+    }
+
+    .alert-danger {
+        background-color: #1e1e2e;
+        border-color: #f38ba8;
+        color: #f38ba8;
+        font-weight: 500;
+    }
+
+    .info-item {
+        background-color: #1e1e2e;
+        color: #ffffff;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 15px;
+    }
+
+    .info-item h6 {
+        color: #89b4fa;
+        font-weight: 500;
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+
+    .info-item p {
+        color: #ffffff;
+        font-weight: 400;
+        font-size: 1.2rem;
+        margin-bottom: 0;
+    }
+
+    .patient-details {
+        color: #ffffff;
+        font-size: 1.1rem;
+    }
+
+    .patient-details strong {
+        color: #89b4fa;
+        font-weight: 600;
+    }
+
+    .patient-details div {
+        margin-bottom: 15px;
+    }
+
+    .text-muted {
+        color: #89b4fa !important;
+        font-size: 1.1rem;
+    }
+
+    .text-primary {
+        color: #89b4fa !important;
+        font-size: 1.1rem;
+    }
+
+    .btn-sm {
+        font-size: 1rem;
+        padding: 8px 15px;
+    }
+
+    .form-select, .form-control {
+        font-size: 1.1rem;
+        padding: 12px;
+    }
+
+    .form-select:focus, .form-control:focus {
+        background-color: #313244;
+        color: #ffffff;
+        border-color: #89b4fa;
+        box-shadow: 0 0 0 0.25rem rgba(137, 180, 250, 0.25);
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h2 class="text-center">Physician Dashboard</h2>
+                </div>
+                <div class="card-body">
+                    {% if physician %}
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Physician Information</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row mb-2">
+                                            <div class="col-md-4"><strong>Employee ID:</strong></div>
+                                            <div class="col-md-8">{{ physician.emp_id }}</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-md-4"><strong>Name:</strong></div>
+                                            <div class="col-md-8">{{ physician.name }}</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-md-4"><strong>Position:</strong></div>
+                                            <div class="col-md-8">{{ physician.position }}</div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-md-4"><strong>Department:</strong></div>
+                                            <div class="col-md-8">{{ physician.dept_name }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Weekly Schedule</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between mb-3">
+                                            <button class="btn btn-outline-primary" onclick="previousWeek()">← Previous Week</button>
+                                            <span id="weekRange" class="align-self-center"></span>
+                                            <button class="btn btn-outline-primary" onclick="nextWeek()">Next Week →</button>
+                                        </div>
+                                        <div id="weeklySchedule">
+                                            {% if weekly_appointments %}
+                                                {% for day, appointments in weekly_appointments.items() %}
+                                                    {% if appointments %}
+                                                        <div class="day-schedule mb-3">
+                                                            <h5>{{ day }}</h5>
+                                                            <div class="list-group">
+                                                            {% for appt in appointments %}
+                                                                <div class="list-group-item">
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <div>
+                                                                            <strong>{{ appt.time }}</strong> - 
+                                                                            <a href="#" onclick="showPatientDetails('{{ appt.patient_id }}')">
+                                                                                {{ appt.patient_name }}
+                                                                            </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            {% endfor %}
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% if not weekly_appointments|length %}
+                                                    <p class="text-center">No appointments scheduled for this week.</p>
+                                                {% endif %}
+                                            {% else %}
+                                                <p class="text-center">No appointments scheduled for this week.</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Assigned Patients Section -->
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4>Assigned Patients</h4>
+                                    <div>
+                                        <button class="btn btn-primary me-2" onclick="showAddPrescriptionModal()">
+                                            <i class="fas fa-prescription me-2"></i> Add Prescription
+                                        </button>
+                                        <div class="btn-group me-2">
+                                            <button class="btn btn-primary dropdown-toggle" type="button" id="stayDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fas fa-bed me-2"></i> Stay
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="stayDropdown">
+                                                <li><a class="dropdown-item" href="#" onclick="showAddAccommodationModal()">Add Accommodation</a></li>
+                                                <li><a class="dropdown-item" href="#" onclick="showViewAccommodationsModal()">View Accommodations</a></li>
+                                            </ul>
+                                        </div>
+                                        <button class="btn btn-primary" onclick="showManageProceduresModal()">
+                                            <i class="fas fa-procedures me-2"></i> Manage Procedures
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                {% if patients %}
+                                    <div class="table-responsive">
+                                        <table class="table table-striped" id="patientTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Patient ID</th>
+                                                    <th>Name</th>
+                                                    <th>Age</th>
+                                                    <th>Sex</th>
+                                                    <th>Phone</th>
+                                                    <th>Current Prescription</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for patient in patients %}
+                                                    <tr>
+                                                        <td>{{ patient.patient_id }}</td>
+                                                        <td>{{ patient.name }}</td>
+                                                        <td>{{ patient.age }}</td>
+                                                        <td>{{ patient.sex }}</td>
+                                                        <td>{{ patient.phone_no }}</td>
+                                                        <td>
+                                                            {% if patient.current_prescription != 'No prescription' %}
+                                                                {% set medications = patient.current_prescription.split(', ') %}
+                                                                {% for med in medications %}
+                                                                    <span class="badge bg-success me-1">{{ med }}</span>
+                                                                {% endfor %}
+                                                            {% else %}
+                                                                <span class="badge bg-secondary">{{ patient.current_prescription }}</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-info" onclick="showPatientDetails('{{ patient.patient_id }}')">
+                                                                View Details
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-info">No patients currently assigned.</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-danger">Physician information not found.</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Update the Patient Details Modal -->
+<div class="modal fade" id="patientDetailsModal" tabindex="-1" aria-labelledby="patientDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="patientDetailsModalLabel">Patient Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="patientDetailsContent">
+                Loading...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Prescription Modal -->
+<div class="modal fade" id="addPrescriptionModal" tabindex="-1" aria-labelledby="addPrescriptionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addPrescriptionModalLabel">Add New Prescription</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="prescriptionForm" onsubmit="submitPrescription(event)">
+                    <div class="mb-3">
+                        <label for="patientSelect" class="form-label">Select Patient</label>
+                        <select class="form-select" id="patientSelect" required>
+                            <option value="">Choose patient...</option>
+                            {% for patient in patients %}
+                            <option value="{{ patient.patient_id }}">{{ patient.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="medicationSelect" class="form-label">Select Medication</label>
+                        <select class="form-select" id="medicationSelect" required>
+                            <option value="">Choose medication...</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add Prescription</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Manage Procedures Modal -->
+<div class="modal fade" id="manageProceduresModal" tabindex="-1" aria-labelledby="manageProceduresModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="manageProceduresModalLabel">
+                    <i class="fas fa-procedures me-2"></i>Manage Procedures
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="procedureForm" onsubmit="submitProcedure(event)">
+                    <div class="mb-3">
+                        <label for="procedurePatientSelect" class="form-label">Select Patient</label>
+                        <select class="form-select" id="procedurePatientSelect" required>
+                            <option value="">Choose patient...</option>
+                            {% for patient in patients %}
+                            <option value="{{ patient.patient_id }}">{{ patient.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="procedureSelect" class="form-label">Select Procedure</label>
+                        <select class="form-select" id="procedureSelect" required>
+                            <option value="">Choose procedure...</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add Procedure</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Accommodation Modal -->
+<div class="modal fade" id="addAccommodationModal" tabindex="-1" aria-labelledby="addAccommodationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addAccommodationModalLabel">Add Accommodation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="accommodationForm" onsubmit="submitAccommodation(event)">
+                    <div class="mb-3">
+                        <label for="accommodationPatientSelect" class="form-label">Select Patient</label>
+                        <select class="form-select" id="accommodationPatientSelect" required>
+                            <option value="">Choose patient...</option>
+                            {% for patient in patients %}
+                            <option value="{{ patient.patient_id }}">{{ patient.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="roomNo" class="form-label">Room Number</label>
+                        <input type="number" class="form-control" id="roomNo" required placeholder="Enter room number">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add Accommodation</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- View Accommodations Modal -->
+<div class="modal fade" id="viewAccommodationsModal" tabindex="-1" aria-labelledby="viewAccommodationsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewAccommodationsModalLabel">Patient Accommodations</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="accommodationFilterPatient" class="form-label">Select Patient</label>
+                    <select class="form-select" id="accommodationFilterPatient" onchange="loadPatientAccommodations()">
+                        <option value="">All Patients</option>
+                        {% for patient in patients %}
+                        <option value="{{ patient.patient_id }}">{{ patient.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped" id="accommodationsTable">
+                        <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>Room No</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="accommodationsBody">
+                            <!-- Accommodations will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentWeekStart = new Date();
+currentWeekStart.setDate(currentWeekStart.getDate() - currentWeekStart.getDay()); // Start from Sunday
+
+function updateWeeklySchedule() {
+    const weekStart = currentWeekStart.toISOString().split('T')[0];
+    fetch(`/physician/schedule/${weekStart}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('weeklySchedule').innerHTML = generateScheduleHTML(data);
+            updateWeekRange();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('weeklySchedule').innerHTML = 
+                '<div class="alert alert-danger">Error loading schedule. Please try again.</div>';
+        });
+}
+
+function generateScheduleHTML(weeklyAppointments) {
+    let html = '';
+    const days = Object.entries(weeklyAppointments);
+    
+    if (Object.keys(weeklyAppointments).length === 0) {
+        return '<p class="text-center">No appointments scheduled for this week.</p>';
+    }
+
+    for (const [day, appointments] of days) {
+        if (appointments.length > 0) {
+            html += `
+                <div class="day-schedule mb-3">
+                    <h5>${day}</h5>
+                    <div class="list-group">
+                        ${appointments.map(appt => `
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>${appt.time}</strong> - 
+                                        <a href="#" onclick="showPatientDetails('${appt.patient_id}')">
+                                            ${appt.patient_name}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+    }
+    
+    return html || '<p class="text-center">No appointments scheduled for this week.</p>';
+}
+
+function updateWeekRange() {
+    const weekEnd = new Date(currentWeekStart);
+    weekEnd.setDate(weekEnd.getDate() + 6);
+    const formatDate = date => date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    document.getElementById('weekRange').textContent = 
+        `${formatDate(currentWeekStart)} - ${formatDate(weekEnd)}`;
+}
+
+function previousWeek() {
+    currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+    updateWeeklySchedule();
+}
+
+function nextWeek() {
+    currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+    updateWeeklySchedule();
+}
+
+function showPatientDetails(patientId) {
+    // Get the modal element
+    const modalElement = document.getElementById('patientDetailsModal');
+    const modal = new bootstrap.Modal(modalElement);
+    
+    // Show loading state
+    document.getElementById('patientDetailsContent').innerHTML = `
+        <div class="text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    `;
+    
+    // Show the modal
+    modal.show();
+    
+    // Fetch patient details and procedures in parallel
+    Promise.all([
+        fetch(`/patient/details/${patientId}`).then(response => response.json()),
+        fetch(`/get_patient_procedures?patient_id=${patientId}`).then(response => response.json())
+    ])
+    .then(([patientData, proceduresData]) => {
+        let proceduresHtml = '';
+        if (proceduresData.procedures && proceduresData.procedures.length > 0) {
+            proceduresHtml = `
+                <div class="mt-4">
+                    <h5 class="text-primary">Procedures</h5>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Procedure</th>
+                                    <th>Cost</th>
+                                    <th>Date</th>
+                                    <th>Physician</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${proceduresData.procedures.map(proc => `
+                                    <tr>
+                                        <td>${proc.name}</td>
+                                        <td>₹${proc.cost}</td>
+                                        <td>${proc.procedure_date || 'N/A'}</td>
+                                        <td>${proc.physician_name || 'N/A'}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        } else {
+            proceduresHtml = `
+                <div class="mt-4">
+                    <h5 class="text-primary">Procedures</h5>
+                    <div class="alert alert-info">No procedures found for this patient.</div>
+                </div>
+            `;
+        }
+
+        document.getElementById('patientDetailsContent').innerHTML = `
+            <div class="patient-details">
+                <div class="row mb-2">
+                    <div class="col-4"><strong>Patient ID:</strong></div>
+                    <div class="col-8">${patientData.patient_id}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-4"><strong>Name:</strong></div>
+                    <div class="col-8">${patientData.name}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-4"><strong>Age:</strong></div>
+                    <div class="col-8">${patientData.age}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-4"><strong>Sex:</strong></div>
+                    <div class="col-8">${patientData.sex}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-4"><strong>Phone:</strong></div>
+                    <div class="col-8">${patientData.phone_no}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-4"><strong>Department:</strong></div>
+                    <div class="col-8">${patientData.dept_name}</div>
+                </div>
+                ${proceduresHtml}
+            </div>
+        `;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('patientDetailsContent').innerHTML = `
+            <div class="alert alert-danger">
+                Error loading patient details. Please try again.
+            </div>
+        `;
+    });
+}
+
+function showAddPrescriptionModal() {
+    // Get the modal element
+    const modalElement = document.getElementById('addPrescriptionModal');
+    const modal = new bootstrap.Modal(modalElement);
+    
+    // Fetch medications for the select dropdown
+    fetch('/get_medications')
+        .then(response => response.json())
+        .then(medications => {
+            const medicationSelect = document.getElementById('medicationSelect');
+            medicationSelect.innerHTML = '<option value="">Choose medication...</option>';
+            medications.forEach(med => {
+                medicationSelect.innerHTML += `
+                    <option value="${med.med_id}">${med.med_name}</option>
+                `;
+            });
+        })
+        .catch(error => {
+            console.error('Error loading medications:', error);
+        });
+    
+    modal.show();
+}
+
+function submitPrescription(event) {
+    event.preventDefault();
+    
+    const patientId = document.getElementById('patientSelect').value;
+    const medId = document.getElementById('medicationSelect').value;
+    
+    if (!patientId || !medId) {
+        alert('Please select both patient and medication');
+        return;
+    }
+    
+    fetch('/add_prescription', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            patient_id: patientId,
+            med_id: medId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        // Close the modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('addPrescriptionModal'));
+        modal.hide();
+        
+        // Show success message and reload the page
+        alert('Prescription added successfully!');
+        window.location.reload(); // This will refresh the entire page
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error adding prescription: ' + error.message);
+    });
+}
+
+// Add function to refresh patient list
+function refreshPatientList() {
+    fetch('/get_patient_list')
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.querySelector('#patientTable tbody');
+            tbody.innerHTML = data.patients.map(patient => `
+                <tr>
+                    <td>${patient.patient_id}</td>
+                    <td>${patient.name}</td>
+                    <td>${patient.age}</td>
+                    <td>${patient.sex}</td>
+                    <td>${patient.phone_no}</td>
+                    <td>
+                        ${patient.current_prescription !== 'No prescription' 
+                            ? patient.current_prescription.split(', ').map(med => 
+                                `<span class="badge bg-success me-1">${med}</span>`
+                              ).join('')
+                            : '<span class="badge bg-secondary">No prescription</span>'
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-info" onclick="showPatientDetails('${patient.patient_id}')">
+                            View Details
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        })
+        .catch(error => {
+            console.error('Error refreshing patient list:', error);
+        });
+}
+
+function showManageProceduresModal() {
+    const modalElement = document.getElementById('manageProceduresModal');
+    const modal = new bootstrap.Modal(modalElement);
+    
+    // Load available procedures
+    fetch('/get_available_procedures')
+        .then(response => response.json())
+        .then(data => {
+            const procedureSelect = document.getElementById('procedureSelect');
+            procedureSelect.innerHTML = '<option value="">Choose procedure...</option>';
+            data.procedures.forEach(procedure => {
+                procedureSelect.innerHTML += `
+                    <option value="${procedure.procedure_id}">${procedure.name} (₹${procedure.cost})</option>
+                `;
+            });
+        })
+        .catch(error => {
+            console.error('Error loading procedures:', error);
+        });
+    
+    modal.show();
+}
+
+function submitProcedure(event) {
+    event.preventDefault();
+    
+    const patientId = document.getElementById('procedurePatientSelect').value;
+    const procedureId = document.getElementById('procedureSelect').value;
+    
+    if (!patientId || !procedureId) {
+        alert('Please select both patient and procedure');
+        return;
+    }
+    
+    fetch('/add_patient_procedure', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            patient_id: patientId,
+            procedure_id: procedureId
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(data => {
+                throw new Error(data.error || 'Failed to add procedure');
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            // Close the modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('manageProceduresModal'));
+            modal.hide();
+            
+            // Show success message
+            alert('Procedure added successfully!');
+            
+            // Refresh the page to show updated data
+            window.location.reload();
+        } else {
+            throw new Error(data.error || 'Failed to add procedure');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error adding procedure: ' + error.message);
+    });
+}
+
+function addProcedure(procedureId) {
+    if (!currentPatientId) {
+        alert('Please select a patient first');
+        return;
+    }
+
+    fetch('/add_patient_procedure', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            patient_id: currentPatientId,
+            procedure_id: procedureId
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(data => {
+                throw new Error(data.error || 'Failed to add procedure');
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            loadPatientProcedures(currentPatientId);
+            loadAvailableProcedures();
+        } else {
+            throw new Error(data.error || 'Failed to add procedure');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert(error.message);
+    });
+}
+
+// Initialize the schedule on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateWeeklySchedule();
+});
+
+// Add these new functions to handle accommodations
+function showAddAccommodationModal() {
+    const modalElement = document.getElementById('addAccommodationModal');
+    const modal = new bootstrap.Modal(modalElement);
+    
+    // Reset the form
+    document.getElementById('accommodationForm').reset();
+    
+    modal.show();
+}
+
+function showViewAccommodationsModal() {
+    const modalElement = document.getElementById('viewAccommodationsModal');
+    const modal = new bootstrap.Modal(modalElement);
+    
+    // Reset the patient filter
+    document.getElementById('accommodationFilterPatient').value = '';
+    
+    // Load all accommodations initially
+    loadPatientAccommodations();
+    
+    modal.show();
+}
+
+function loadPatientAccommodations(page = 1) {
+    const patientId = document.getElementById('accommodationFilterPatient').value;
+    const accommodationsBody = document.getElementById('accommodationsBody');
+    
+    // Show loading state
+    accommodationsBody.innerHTML = '<tr><td colspan="3" class="text-center">Loading accommodations...</td></tr>';
+    
+    // Determine which endpoint to call based on whether a patient is selected
+    const url = patientId ? 
+        `/get_patient_accommodations?patient_id=${patientId}` : 
+        `/get_all_accommodations?page=${page}&per_page=10`;
+    
+    console.log('Fetching accommodations from:', url); // Debug log
+    
+    fetch(url)
+        .then(response => {
+            console.log('Response status:', response.status); // Debug log
+            console.log('Response headers:', response.headers); // Debug log
+            
+            if (!response.ok) {
+                return response.json().then(err => {
+                    console.error('Server error:', err); // Debug log
+                    throw new Error(err.error || 'Failed to load accommodations');
+                });
+            }
+            
+            // Check if response is JSON
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                return response.text().then(text => {
+                    console.error('Non-JSON response:', text); // Debug log
+                    throw new Error('Server returned non-JSON response');
+                });
+            }
+            
+            return response.json();
+        })
+        .then(data => {
+            console.log('Received data:', data); // Debug log
+            
+            // Clear the table body
+            accommodationsBody.innerHTML = '';
+            
+            if (!data.accommodations || data.accommodations.length === 0) {
+                accommodationsBody.innerHTML = `
+                    <tr>
+                        <td colspan="3" class="text-center">
+                            <div class="alert alert-info">
+                                No accommodations found.
+                                <button class="btn btn-sm btn-primary ms-3" onclick="showAddAccommodationModal()">
+                                    Add Accommodation
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // Add the accommodations rows
+            data.accommodations.forEach(acc => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${acc.patient_name}</td>
+                    <td>${acc.room_no}</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="dischargePatient('${acc.patient_id}', '${acc.room_no}')">Remove</button>
+                    </td>
+                `;
+                accommodationsBody.appendChild(row);
+            });
+            
+            // Add pagination controls if viewing all accommodations
+            if (!patientId && data.total_pages > 1) {
+                const paginationRow = document.createElement('tr');
+                paginationRow.innerHTML = `
+                    <td colspan="3" class="text-center">
+                        <nav aria-label="Accommodations pagination">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item ${page === 1 ? 'disabled' : ''}">
+                                    <a class="page-link" href="#" onclick="loadPatientAccommodations(${page - 1})" ${page === 1 ? 'tabindex="-1"' : ''}>Previous</a>
+                                </li>
+                                ${Array.from({length: data.total_pages}, (_, i) => i + 1)
+                                    .map(p => `
+                                        <li class="page-item ${p === page ? 'active' : ''}">
+                                            <a class="page-link" href="#" onclick="loadPatientAccommodations(${p})">${p}</a>
+                                        </li>
+                                    `).join('')}
+                                <li class="page-item ${page === data.total_pages ? 'disabled' : ''}">
+                                    <a class="page-link" href="#" onclick="loadPatientAccommodations(${page + 1})" ${page === data.total_pages ? 'tabindex="-1"' : ''}>Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </td>
+                `;
+                accommodationsBody.appendChild(paginationRow);
+            }
+        })
+        .catch(error => {
+            console.error('Error loading accommodations:', error); // Debug log
+            accommodationsBody.innerHTML = `
+                <tr>
+                    <td colspan="3" class="text-center">
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            Error loading accommodations: ${error.message}<br>
+                            Please try again or contact support if the problem persists.
+                        </div>
+                    </td>
+                </tr>
+            `;
+        });
+}
+
+function submitAccommodation(event) {
+    event.preventDefault();
+    
+    const patientId = document.getElementById('accommodationPatientSelect').value;
+    const roomNo = document.getElementById('roomNo').value;
+    
+    if (!patientId || !roomNo) {
+        alert('Please fill in all fields');
+        return;
+    }
+    
+    fetch('/add_accommodation', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            patient_id: patientId,
+            room_no: roomNo
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(data => {
+                throw new Error(data.error || 'Failed to add accommodation');
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            // Close the modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addAccommodationModal'));
+            modal.hide();
+            
+            // Show success message
+            alert('Accommodation added successfully!');
+            
+            // Refresh the accommodations list if the view modal is open
+            if (document.getElementById('viewAccommodationsModal').classList.contains('show')) {
+                loadPatientAccommodations();
+            }
+            
+            // Refresh the page to update the patient list
+            window.location.reload();
+        } else {
+            throw new Error(data.error || 'Failed to add accommodation');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error adding accommodation: ' + error.message);
+    });
+}
+
+function dischargePatient(patientId, roomNo) {
+    if (confirm('Are you sure you want to remove this accommodation?')) {
+        fetch('/discharge_patient', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                patient_id: patientId,
+                room_no: roomNo
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.error || 'Failed to remove accommodation');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                alert('Accommodation removed successfully!');
+                loadPatientAccommodations();
+            } else {
+                throw new Error(data.error || 'Failed to remove accommodation');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error removing accommodation: ' + error.message);
+        });
+    }
+}
+</script>
+{% endblock %} 

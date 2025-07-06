@@ -32,7 +32,7 @@ Functions:
 
 Backend Details:
 - Routes: Flask handles all HTTP routes and sessions
-- Oracle DB:
+- SQL DB:
   - Tables: patient, physician, appointments, prescription, stay, procedure, medication, department, etc.
   - Stored Procedures: get_physician_details, get_patient_prescriptions, get_weekly_appointments, add_prescription
 - Validations and retry logic for DB errors
